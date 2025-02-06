@@ -123,7 +123,7 @@ namespace grafuri2._0
             }
         }
 
-        private async Task dfs_btn_ClickAsync(object sender, EventArgs e)
+        private void dfs_btn_ClickAsync(object sender, EventArgs e)
         {
             viz = new bool[100];
             muchiiParcurse = new bool[100, 100];
@@ -132,7 +132,7 @@ namespace grafuri2._0
             nodStart = Int32.Parse(start_textbox.Text);
             if (nodStart!=-1 && (nodStart >= 1 && nodStart<=noduri.Count))
             {
-                await dfs(nodStart - 1);
+                dfs(nodStart - 1);
             }
             else
             {
