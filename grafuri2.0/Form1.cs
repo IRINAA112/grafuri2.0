@@ -25,26 +25,48 @@ namespace grafuri2._0
         bool[] viz = new bool[100];
         int selectedNode = -1;
 
-        private async Task dfs(int node)
-        {
-            viz[node] = true;
-            pictureBox1.Invalidate(); // Redesenare interfață
-            await Task.Delay(500); // Pauză pentru vizualizare
+        Queue<int> dfsQueue = new Queue<int>();
+        Timer dfsTimer = new Timer();
 
-            for (int i = 0; i < noduri.Count; i++) // Nodurile sunt indexate de la 0
+        private void StartDFS(int startNode)
+        {
+            viz = new bool[100];
+            muchiiParcurse = new bool[100, 100];
+            dfsQueue.Clear();
+            pictureBox1.Invalidate();
+
+            viz[startNode] = true;
+            dfsQueue.Enqueue(startNode);
+
+            dfsTimer.Interval = 1500; 
+            dfsTimer.Tick += DfsStep;
+            dfsTimer.Start();
+        }
+
+
+        private void DfsStep(object sender, EventArgs e)
+        {
+            if (dfsQueue.Count == 0)
+            {
+                dfsTimer.Stop();
+                return;
+            }
+
+            int node = dfsQueue.Dequeue();
+
+            for (int i = 0; i < noduri.Count; i++)
             {
                 if (muchii[node, i] && !viz[i])
                 {
-                    // Colorează muchia dintre `node` și `i`
-                    muchiiParcurse[node,i]=true;
-                    pictureBox1.Invalidate();
-                    await Task.Delay(500);
-
-                    await dfs(i);
+                    viz[i] = true;
+                    muchiiParcurse[node, i] = true;
+                    muchiiParcurse[i, node] = true;
+                    dfsQueue.Enqueue(i);
                 }
             }
-        }
 
+            pictureBox1.Invalidate();
+        }
 
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
@@ -123,16 +145,16 @@ namespace grafuri2._0
             }
         }
 
-        private async Task dfs_btn_ClickAsync(object sender, EventArgs e)
+        private void dfs_btn_Click(object sender, EventArgs e)
         {
             viz = new bool[100];
             muchiiParcurse = new bool[100, 100];
             pictureBox1.Invalidate();
             int nodStart = -1;
             nodStart = Int32.Parse(start_textbox.Text);
-            if (nodStart!=-1 && (nodStart >= 1 && nodStart<=noduri.Count))
+            if (nodStart != -1 && (nodStart >= 1 && nodStart <= noduri.Count))
             {
-                await dfs(nodStart - 1);
+                StartDFS(nodStart - 1);
             }
             else
             {

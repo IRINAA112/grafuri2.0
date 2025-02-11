@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.dfs_btn = new System.Windows.Forms.Button();
             this.bfs_btn = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.start_textbox = new System.Windows.Forms.TextBox();
             this.start_lbl = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -61,7 +63,7 @@
             this.dfs_btn.TabIndex = 1;
             this.dfs_btn.Text = "DFS";
             this.dfs_btn.UseVisualStyleBackColor = true;
-            this.dfs_btn.Click += new System.EventHandler(this.dfs_btn_ClickAsync);
+            this.dfs_btn.Click += new System.EventHandler(this.dfs_btn_Click);
             // 
             // bfs_btn
             // 
@@ -130,6 +132,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TextBox start_textbox;
         private System.Windows.Forms.Label start_lbl;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 
