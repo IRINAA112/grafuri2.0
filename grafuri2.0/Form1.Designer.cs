@@ -36,6 +36,7 @@
             this.start_textbox = new System.Windows.Forms.TextBox();
             this.start_lbl = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.clear_btn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -70,16 +71,18 @@
             this.bfs_btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.bfs_btn.Font = new System.Drawing.Font("Arial Black", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bfs_btn.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.bfs_btn.Location = new System.Drawing.Point(708, 13);
+            this.bfs_btn.Location = new System.Drawing.Point(708, 12);
             this.bfs_btn.Name = "bfs_btn";
             this.bfs_btn.Size = new System.Drawing.Size(114, 66);
             this.bfs_btn.TabIndex = 2;
             this.bfs_btn.Text = "BFS";
             this.bfs_btn.UseVisualStyleBackColor = true;
+            this.bfs_btn.Click += new System.EventHandler(this.bfs_btn_Click);
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.LavenderBlush;
+            this.panel1.Controls.Add(this.clear_btn);
             this.panel1.Controls.Add(this.start_textbox);
             this.panel1.Controls.Add(this.start_lbl);
             this.panel1.Controls.Add(this.bfs_btn);
@@ -108,6 +111,19 @@
             this.start_lbl.TabIndex = 3;
             this.start_lbl.Text = "Nod de start:";
             // 
+            // clear_btn
+            // 
+            this.clear_btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.clear_btn.Font = new System.Drawing.Font("Arial Black", 16F, System.Drawing.FontStyle.Bold);
+            this.clear_btn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.clear_btn.Location = new System.Drawing.Point(512, 12);
+            this.clear_btn.Name = "clear_btn";
+            this.clear_btn.Size = new System.Drawing.Size(156, 66);
+            this.clear_btn.TabIndex = 5;
+            this.clear_btn.Text = "Golește";
+            this.clear_btn.UseVisualStyleBackColor = true;
+            this.clear_btn.Click += new System.EventHandler(this.clear_btn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -133,6 +149,7 @@
         private System.Windows.Forms.TextBox start_textbox;
         private System.Windows.Forms.Label start_lbl;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Button clear_btn;
     }
 }
 

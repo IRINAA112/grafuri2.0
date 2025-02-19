@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 
 namespace grafuri2._0
 {
@@ -27,6 +21,8 @@ namespace grafuri2._0
 
         Queue<int> dfsQueue = new Queue<int>();
         Timer dfsTimer = new Timer();
+        Queue<int> bfsQueue = new Queue<int>();
+        Timer bfsTimer = new Timer();
 
         private void StartDFS(int startNode)
         {
@@ -41,6 +37,48 @@ namespace grafuri2._0
             dfsTimer.Interval = 1500; 
             dfsTimer.Tick += DfsStep;
             dfsTimer.Start();
+        }
+        private void StartBFS(int startNode)
+        {
+            bfsTimer.Stop();
+            bfsTimer.Tick -= BfsStep;
+
+            viz = new bool[100];
+            muchiiParcurse = new bool[100, 100];
+            bfsQueue.Clear();
+            pictureBox1.Invalidate();
+
+            viz[startNode] = true;
+            bfsQueue.Enqueue(startNode);
+
+            bfsTimer.Interval = 1500;
+            bfsTimer.Tick += BfsStep;
+            bfsTimer.Start();
+        }
+        int muchie_curenta=0;
+        private void BfsStep(object sender, EventArgs e)
+        {
+            if (bfsQueue.Count == 0)
+            {
+                bfsTimer.Stop();
+                return;
+            }
+
+            int node = bfsQueue.Dequeue();
+
+            for (; muchie_curenta < noduri.Count; muchie_curenta++)
+            {
+                if (muchii[node, muchie_curenta] && !viz[muchie_curenta])
+                {
+                    viz[muchie_curenta] = true;
+                    muchiiParcurse[node, muchie_curenta] = true;
+                    muchiiParcurse[muchie_curenta, node] = true;
+                    bfsQueue.Enqueue(muchie_curenta);
+                    break;
+                }
+            }
+
+            pictureBox1.Invalidate();
         }
 
 
@@ -117,7 +155,7 @@ namespace grafuri2._0
                         Pen culoare = Pens.Black;
                         if (muchiiParcurse[i, j] || muchiiParcurse[j,i])
                         {
-                            culoare = new Pen(Color.Blue, 3); 
+                            culoare = new Pen(Color.Purple, 3); 
                         }
                         g.DrawLine(culoare, noduri[i].X, noduri[i].Y, noduri[j].X, noduri[j].Y);
                     }
@@ -130,7 +168,7 @@ namespace grafuri2._0
 
                 if (viz[i])
                 {
-                    culoare = Pens.Green; 
+                    culoare = Pens.Purple; 
                 }
                 if (i == selectedNode)
                 {
@@ -152,7 +190,7 @@ namespace grafuri2._0
             pictureBox1.Invalidate();
             int nodStart = -1;
             nodStart = Int32.Parse(start_textbox.Text);
-            if (nodStart != -1 && (nodStart >= 1 && nodStart <= noduri.Count))
+            if (nodStart >= 1 && nodStart <= noduri.Count)
             {
                 StartDFS(nodStart - 1);
             }
@@ -160,6 +198,33 @@ namespace grafuri2._0
             {
                 MessageBox.Show("Introduceți un nod de start valid!");
             }
+        }
+
+        private void bfs_btn_Click(object sender, EventArgs e)
+        {
+            viz = new bool[100];
+            muchiiParcurse = new bool[100, 100];
+            pictureBox1.Invalidate();
+            int nodStart = -1;
+            nodStart = Int32.Parse(start_textbox.Text);
+            if (nodStart >= 1 && nodStart <= noduri.Count)
+            {
+                StartBFS(nodStart - 1);
+            }
+            else
+            {
+                MessageBox.Show("Introduceți un nod de start valid!");
+            }
+        }
+
+        private void clear_btn_Click(object sender, EventArgs e)
+        {
+            noduri.Clear();
+            muchii = new bool[100, 100];
+            muchiiParcurse = new bool[100, 100];
+            viz = new bool[100];
+            selectedNode = -1;
+            pictureBox1.Invalidate();
         }
     }
 }
