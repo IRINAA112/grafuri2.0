@@ -14,97 +14,49 @@ namespace grafuri2._0
 
         int raza = 20;
         List<Point> noduri = new List<Point>();
+        List<Tuple<int, int>> parcurgere_muchii = new List<Tuple<int, int>>();
         bool[,] muchii = new bool[100, 100];
         bool[,] muchiiParcurse = new bool[100, 100];
         bool[] viz = new bool[100];
         int selectedNode = -1;
+        int muchie_curenta = 0;
 
-        Queue<int> dfsQueue = new Queue<int>();
-        Timer dfsTimer = new Timer();
-        Queue<int> bfsQueue = new Queue<int>();
-        Timer bfsTimer = new Timer();
-
-        private void StartDFS(int startNode)
+        private void DFS(int nodStart)
         {
-            viz = new bool[100];
-            muchiiParcurse = new bool[100, 100];
-            dfsQueue.Clear();
-            pictureBox1.Invalidate();
-
-            viz[startNode] = true;
-            dfsQueue.Enqueue(startNode);
-
-            dfsTimer.Interval = 1500; 
-            dfsTimer.Tick += DfsStep;
-            dfsTimer.Start();
-        }
-        private void StartBFS(int startNode)
-        {
-            bfsTimer.Stop();
-            bfsTimer.Tick -= BfsStep;
-
-            viz = new bool[100];
-            muchiiParcurse = new bool[100, 100];
-            bfsQueue.Clear();
-            pictureBox1.Invalidate();
-
-            viz[startNode] = true;
-            bfsQueue.Enqueue(startNode);
-
-            bfsTimer.Interval = 1500;
-            bfsTimer.Tick += BfsStep;
-            bfsTimer.Start();
-        }
-        int muchie_curenta=0;
-        private void BfsStep(object sender, EventArgs e)
-        {
-            if (bfsQueue.Count == 0)
+            viz[nodStart] = true;
+            for (int i = 1; i <= noduri.Count; i++)
             {
-                bfsTimer.Stop();
-                return;
-            }
-
-            int node = bfsQueue.Dequeue();
-
-            for (; muchie_curenta < noduri.Count; muchie_curenta++)
-            {
-                if (muchii[node, muchie_curenta] && !viz[muchie_curenta])
+                if (muchii[nodStart, i] == true && viz[i] == false)
                 {
-                    viz[muchie_curenta] = true;
-                    muchiiParcurse[node, muchie_curenta] = true;
-                    muchiiParcurse[muchie_curenta, node] = true;
-                    bfsQueue.Enqueue(muchie_curenta);
-                    break;
+                    parcurgere_muchii.Add(new Tuple<int, int>(nodStart, i));
+                    MessageBox.Show(nodStart.ToString()+ " "+ i.ToString());
+                    DFS(i);
+                    
+                }
+            }
+        }
+        private void BFS(int nodStart) {
+            Queue<Tuple<int,int>> varfuri = new Queue<Tuple<int,int>>(); 
+            varfuri.Enqueue(new Tuple<int, int> ( nodStart, -1 ));
+            while(varfuri.Count > 0)
+            {
+                Tuple<int,int> nod = varfuri.Dequeue();
+                if (nod.Item2 != -1)
+                {
+                    parcurgere_muchii.Add(nod);
+                }
+                for (int i = 0; i < noduri.Count; i++)
+                {
+                    if (viz[i] == false && muchii[nod.Item1, i] == true)
+                    {
+                        viz[i] = true;
+                        varfuri.Enqueue(new Tuple<int, int>(i, nod.Item1));
+                    }
                 }
             }
 
-            pictureBox1.Invalidate();
         }
-
-
-        private void DfsStep(object sender, EventArgs e)
-        {
-            if (dfsQueue.Count == 0)
-            {
-                dfsTimer.Stop();
-                return;
-            }
-
-            int node = dfsQueue.Dequeue();
-
-            for (int i = 0; i < noduri.Count; i++)
-            {
-                if (muchii[node, i] && !viz[i])
-                {
-                    viz[i] = true;
-                    muchiiParcurse[node, i] = true;
-                    muchiiParcurse[i, node] = true;
-                    dfsQueue.Enqueue(i);
-                }
-            }
-
-            pictureBox1.Invalidate();
-        }
+       
 
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
@@ -145,6 +97,7 @@ namespace grafuri2._0
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
+            bool[] viz2 = new bool[100];
 
             for (int i = 0; i < noduri.Count; i++)
             {
@@ -153,22 +106,27 @@ namespace grafuri2._0
                     if (muchii[i, j])
                     {
                         Pen culoare = Pens.Black;
-                        if (muchiiParcurse[i, j] || muchiiParcurse[j,i])
-                        {
-                            culoare = new Pen(Color.Purple, 3); 
-                        }
                         g.DrawLine(culoare, noduri[i].X, noduri[i].Y, noduri[j].X, noduri[j].Y);
                     }
                 }
+            }
+
+            for(int i=1; i<=muchie_curenta; i++)
+            {
+                Pen culoare =new Pen(Brushes.Purple, 4);
+                
+                g.DrawLine(culoare, noduri[parcurgere_muchii[i].Item1], noduri[parcurgere_muchii[i].Item2]);
+                viz2[parcurgere_muchii[i].Item1] = true;
+                viz2[parcurgere_muchii[i].Item2] = true;
             }
 
             for (int i = 0; i < noduri.Count; i++)
             {
                 Pen culoare = Pens.Black;
 
-                if (viz[i])
+                if (viz2[i])
                 {
-                    culoare = Pens.Purple; 
+                    culoare = new Pen(Brushes.Purple, 4); 
                 }
                 if (i == selectedNode)
                 {
@@ -189,10 +147,13 @@ namespace grafuri2._0
             muchiiParcurse = new bool[100, 100];
             pictureBox1.Invalidate();
             int nodStart = -1;
-            nodStart = Int32.Parse(start_textbox.Text);
-            if (nodStart >= 1 && nodStart <= noduri.Count)
+            bool isnumber = int.TryParse(start_textbox.Text,out nodStart);
+            if (isnumber && nodStart >= 1 && nodStart <= noduri.Count)
             {
-                StartDFS(nodStart - 1);
+                parcurgere_muchii.Clear();
+                DFS(nodStart - 1);
+                muchie_curenta = 0;
+                timerDFS.Start();   
             }
             else
             {
@@ -206,10 +167,13 @@ namespace grafuri2._0
             muchiiParcurse = new bool[100, 100];
             pictureBox1.Invalidate();
             int nodStart = -1;
-            nodStart = Int32.Parse(start_textbox.Text);
-            if (nodStart >= 1 && nodStart <= noduri.Count)
+            bool isnumber = int.TryParse(start_textbox.Text, out nodStart);
+            if (isnumber && nodStart >= 1 && nodStart <= noduri.Count)
             {
-                StartBFS(nodStart - 1);
+                parcurgere_muchii.Clear();
+                BFS(nodStart - 1);
+                muchie_curenta = 0;
+                timerDFS.Start();
             }
             else
             {
@@ -224,7 +188,21 @@ namespace grafuri2._0
             muchiiParcurse = new bool[100, 100];
             viz = new bool[100];
             selectedNode = -1;
+            muchie_curenta = 0;
             pictureBox1.Invalidate();
+        }
+
+        private void timerDFS_Tick(object sender, EventArgs e)
+        {
+            muchie_curenta++;
+            if (muchie_curenta == parcurgere_muchii.Count)
+            {
+                muchie_curenta--;
+                timerDFS.Stop();
+                
+            }
+            pictureBox1.Invalidate();
+            
         }
     }
 }

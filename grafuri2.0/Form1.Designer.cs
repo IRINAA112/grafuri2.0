@@ -33,10 +33,10 @@
             this.dfs_btn = new System.Windows.Forms.Button();
             this.bfs_btn = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.clear_btn = new System.Windows.Forms.Button();
             this.start_textbox = new System.Windows.Forms.TextBox();
             this.start_lbl = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.clear_btn = new System.Windows.Forms.Button();
+            this.timerDFS = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -93,6 +93,19 @@
             this.panel1.Size = new System.Drawing.Size(1010, 98);
             this.panel1.TabIndex = 3;
             // 
+            // clear_btn
+            // 
+            this.clear_btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.clear_btn.Font = new System.Drawing.Font("Arial Black", 16F, System.Drawing.FontStyle.Bold);
+            this.clear_btn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.clear_btn.Location = new System.Drawing.Point(512, 12);
+            this.clear_btn.Name = "clear_btn";
+            this.clear_btn.Size = new System.Drawing.Size(156, 66);
+            this.clear_btn.TabIndex = 5;
+            this.clear_btn.Text = "Golește";
+            this.clear_btn.UseVisualStyleBackColor = true;
+            this.clear_btn.Click += new System.EventHandler(this.clear_btn_Click);
+            // 
             // start_textbox
             // 
             this.start_textbox.Font = new System.Drawing.Font("Arial Narrow", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -111,18 +124,10 @@
             this.start_lbl.TabIndex = 3;
             this.start_lbl.Text = "Nod de start:";
             // 
-            // clear_btn
+            // timerDFS
             // 
-            this.clear_btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.clear_btn.Font = new System.Drawing.Font("Arial Black", 16F, System.Drawing.FontStyle.Bold);
-            this.clear_btn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.clear_btn.Location = new System.Drawing.Point(512, 12);
-            this.clear_btn.Name = "clear_btn";
-            this.clear_btn.Size = new System.Drawing.Size(156, 66);
-            this.clear_btn.TabIndex = 5;
-            this.clear_btn.Text = "Golește";
-            this.clear_btn.UseVisualStyleBackColor = true;
-            this.clear_btn.Click += new System.EventHandler(this.clear_btn_Click);
+            this.timerDFS.Interval = 1000;
+            this.timerDFS.Tick += new System.EventHandler(this.timerDFS_Tick);
             // 
             // Form1
             // 
@@ -148,7 +153,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TextBox start_textbox;
         private System.Windows.Forms.Label start_lbl;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer timerDFS;
         private System.Windows.Forms.Button clear_btn;
     }
 }
