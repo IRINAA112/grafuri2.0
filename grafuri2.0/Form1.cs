@@ -24,23 +24,23 @@ namespace grafuri2._0
         private void DFS(int nodStart)
         {
             viz[nodStart] = true;
-            for (int i = 1; i <= noduri.Count; i++)
+            for (int i = 0; i < noduri.Count; i++)
             {
                 if (muchii[nodStart, i] == true && viz[i] == false)
                 {
                     parcurgere_muchii.Add(new Tuple<int, int>(nodStart, i));
-                    MessageBox.Show(nodStart.ToString()+ " "+ i.ToString());
                     DFS(i);
-                    
+
                 }
             }
         }
-        private void BFS(int nodStart) {
-            Queue<Tuple<int,int>> varfuri = new Queue<Tuple<int,int>>(); 
-            varfuri.Enqueue(new Tuple<int, int> ( nodStart, -1 ));
-            while(varfuri.Count > 0)
+        private void BFS(int nodStart)
+        {
+            Queue<Tuple<int, int>> varfuri = new Queue<Tuple<int, int>>();
+            varfuri.Enqueue(new Tuple<int, int>(nodStart, -1));
+            while (varfuri.Count > 0)
             {
-                Tuple<int,int> nod = varfuri.Dequeue();
+                Tuple<int, int> nod = varfuri.Dequeue();
                 if (nod.Item2 != -1)
                 {
                     parcurgere_muchii.Add(nod);
@@ -56,41 +56,33 @@ namespace grafuri2._0
             }
 
         }
-       
-
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
-            int x = e.X; 
-            int y=e.Y;
-            
-            for(int i=0; i<noduri.Count; i++)
+            int x = e.X;
+            int y = e.Y;
+
+            for (int i = 0; i < noduri.Count; i++)
             {
-                if ((Math.Sqrt(Math.Pow((x - noduri[i].X),2) + Math.Pow((y - noduri[i].Y), 2)))<=3*raza)
+                if ((Math.Sqrt(Math.Pow((x - noduri[i].X), 2) + Math.Pow((y - noduri[i].Y), 2))) <= 3 * raza)
                 {
-                    if (selectedNode == -1) { 
+                    if (selectedNode == -1)
+                    {
                         selectedNode = i;
-
                         pictureBox1.Invalidate();
-
                         return;
                     }
-
                     if (selectedNode != i)
                     {
                         muchii[selectedNode, i] = !muchii[selectedNode, i];
                         muchii[i, selectedNode] = !muchii[i, selectedNode];
                     }
-
                     selectedNode = -1;
-
                     pictureBox1.Invalidate();
 
                     return;
                 }
             }
-
-            noduri.Add(new Point(x,y));
-
+            noduri.Add(new Point(x, y));
             pictureBox1.Invalidate();
         }
 
@@ -111,10 +103,10 @@ namespace grafuri2._0
                 }
             }
 
-            for(int i=1; i<=muchie_curenta; i++)
+            for (int i = 0; i < muchie_curenta; i++)
             {
-                Pen culoare =new Pen(Brushes.Purple, 4);
-                
+                Pen culoare = new Pen(Brushes.Purple, 4);
+
                 g.DrawLine(culoare, noduri[parcurgere_muchii[i].Item1], noduri[parcurgere_muchii[i].Item2]);
                 viz2[parcurgere_muchii[i].Item1] = true;
                 viz2[parcurgere_muchii[i].Item2] = true;
@@ -126,15 +118,15 @@ namespace grafuri2._0
 
                 if (viz2[i])
                 {
-                    culoare = new Pen(Brushes.Purple, 4); 
+                    culoare = new Pen(Brushes.Purple, 4);
                 }
                 if (i == selectedNode)
                 {
-                    culoare= Pens.Red; 
+                    culoare = Pens.Red;
                 }
                 g.DrawEllipse(culoare, noduri[i].X - raza, noduri[i].Y - raza, raza * 2, raza * 2);
 
-                string numText = (i+1).ToString();
+                string numText = (i + 1).ToString();
                 Font font = new Font("Arial", 16);
                 SizeF textSize = g.MeasureString(numText, font);
                 g.DrawString(numText, font, i == selectedNode ? Brushes.Red : Brushes.Black, noduri[i].X - textSize.Width / 2, noduri[i].Y - textSize.Height / 2);
@@ -147,13 +139,13 @@ namespace grafuri2._0
             muchiiParcurse = new bool[100, 100];
             pictureBox1.Invalidate();
             int nodStart = -1;
-            bool isnumber = int.TryParse(start_textbox.Text,out nodStart);
+            bool isnumber = int.TryParse(start_textbox.Text, out nodStart);
             if (isnumber && nodStart >= 1 && nodStart <= noduri.Count)
             {
                 parcurgere_muchii.Clear();
                 DFS(nodStart - 1);
                 muchie_curenta = 0;
-                timerDFS.Start();   
+                timerDFS.Start();
             }
             else
             {
@@ -197,12 +189,10 @@ namespace grafuri2._0
             muchie_curenta++;
             if (muchie_curenta == parcurgere_muchii.Count)
             {
-                muchie_curenta--;
                 timerDFS.Stop();
-                
             }
             pictureBox1.Invalidate();
-            
+
         }
     }
 }
